@@ -5,29 +5,41 @@ Without a real key the module falls back to STUB mode — returns deterministic
 mock responses so all other code paths can be tested without credentials.
 """
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 _STUB = not bool(os.getenv("WATSONX_API_KEY", "").strip().replace("your_api_key_here", ""))
+_model = None
 
 if not _STUB:
-    from ibm_watsonx_ai import Credentials
-    from ibm_watsonx_ai.foundation_models import ModelInference
+    try:
+        from ibm_watsonx_ai import Credentials
+        from ibm_watsonx_ai.foundation_models import ModelInference
 
-    _model = ModelInference(
-        model_id="ibm/granite-13b-instruct-v2",
-        credentials=Credentials(
-            api_key=os.getenv("WATSONX_API_KEY"),
-            url=os.getenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com"),
-        ),
-        project_id=os.getenv("WATSONX_PROJECT_ID"),
-        params={"max_new_tokens": 512, "temperature": 0.2},
-    )
+        _model = ModelInference(
+            model_id=os.getenv("WATSONX_MODEL_ID", "ibm/granite-13b-instruct-v2"),
+            credentials=Credentials(
+                api_key=os.getenv("WATSONX_API_KEY"),
+                url=os.getenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com"),
+            ),
+            project_id=os.getenv("WATSONX_PROJECT_ID"),
+            params={"max_new_tokens": 512, "temperature": 0.2},
+        )
+    except Exception as exc:
+        logger.error("Failed to initialise Watsonx model — falling back to stub: %s", exc)
+        _model = None
 
 
 def generate(prompt: str) -> str:
     """Send prompt to Granite and return the response text."""
-    if _STUB:
+    if _STUB or _model is None:
         return _stub_response(prompt)
-    return _model.generate_text(prompt=prompt)
+    try:
+        return _model.generate_text(prompt=prompt)
+    except Exception as exc:
+        logger.error("Watsonx generate_text failed: %s", exc)
+        return _stub_response(prompt)
 
 
 # ---------------------------------------------------------------------------

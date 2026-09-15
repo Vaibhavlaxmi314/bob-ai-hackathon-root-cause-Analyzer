@@ -3,9 +3,12 @@ Tool 2 — Re-routing Advisor
 For a given affected shipment, calls watsonx.ai Granite to produce
 ranked rerouting / carrier alternatives with reasoning.
 """
+import logging
 from sqlalchemy.orm import Session
 from models import Shipment, DisruptionEvent
 from watsonx_client import generate
+
+logger = logging.getLogger(__name__)
 
 
 # Known carrier alternatives per disrupted region (static knowledge base)
@@ -23,6 +26,9 @@ def get_rerouting_recommendation(shipment_id: int, db: Session) -> dict:
     Build a structured prompt for the given shipment and call Granite
     to get ranked rerouting alternatives.
     """
+    if not isinstance(shipment_id, int) or shipment_id <= 0:
+        return {"error": f"Invalid shipment_id: {shipment_id}"}
+
     shipment = db.query(Shipment).get(shipment_id)
     if not shipment:
         return {"error": f"Shipment {shipment_id} not found"}
@@ -57,7 +63,11 @@ def get_rerouting_recommendation(shipment_id: int, db: Session) -> dict:
         f"Label them RECOMMENDATION 1, RECOMMENDATION 2, RECOMMENDATION 3."
     )
 
-    raw_response = generate(prompt)
+    try:
+        raw_response = generate(prompt)
+    except Exception as exc:
+        logger.error("Rerouting generate failed for shipment %s: %s", shipment_id, exc)
+        raw_response = ""
 
     return {
         "shipment_id": shipment.id,

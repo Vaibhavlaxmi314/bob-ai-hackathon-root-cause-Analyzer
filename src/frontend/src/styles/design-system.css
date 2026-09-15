@@ -595,4 +595,5 @@
   color: var(--color-text-muted);
   font-size: 15px;
 }
-.empty-state--ok { color: var(--color-green); }
+.empty-state--ok    { color: var(--color-green); }
+.empty-state--error { color: var(--color-red); }

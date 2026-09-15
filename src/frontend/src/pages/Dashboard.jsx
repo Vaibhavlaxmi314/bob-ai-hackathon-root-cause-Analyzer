@@ -9,6 +9,7 @@ function SkeletonCard() {
 export default function Dashboard() {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState(null);
 
   useEffect(() => {
     Promise.all([getImpact(), getFleetIdle(), getColdChain()])
@@ -21,8 +22,14 @@ export default function Dashboard() {
         });
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error('Dashboard fetch failed:', err);
+        setError('Failed to load dashboard data. Is the backend running?');
+        setLoading(false);
+      });
   }, []);
+
+  if (error) return <p className="empty-state empty-state--error">{error}</p>;
 
   return (
     <div>

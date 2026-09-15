@@ -113,8 +113,9 @@ async def list_tools() -> list[types.Tool]:
 # ---------------------------------------------------------------------------
 @app.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
-    db = SessionLocal()
+    db = None
     try:
+        db = SessionLocal()
         if name == "analyze_disruption_impact":
             result = analyze_shipment_impact(db)
             return [types.TextContent(type="text", text=json.dumps(result, indent=2))]
@@ -141,7 +142,8 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
     except Exception as exc:
         return [types.TextContent(type="text", text=json.dumps({"error": str(exc)}))]
     finally:
-        db.close()
+        if db is not None:
+            db.close()
 
 
 async def main():

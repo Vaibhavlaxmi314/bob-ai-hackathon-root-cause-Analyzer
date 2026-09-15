@@ -34,13 +34,19 @@ function SkeletonTable() {
 export default function Fleet() {
   const [assets,  setAssets]  = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState(null);
   const [region,  setRegion]  = useState('');
 
   const load = (r) => {
     setLoading(true);
+    setError(null);
     getFleetIdle(r || undefined)
       .then(res => { setAssets(res.data.assets); setLoading(false); })
-      .catch(()  => setLoading(false));
+      .catch((err) => {
+        console.error('Fleet fetch failed:', err);
+        setError('Failed to load fleet data. Is the backend running?');
+        setLoading(false);
+      });
   };
 
   useEffect(() => { load(); }, []);
@@ -67,6 +73,8 @@ export default function Fleet() {
 
       {loading ? (
         <SkeletonTable />
+      ) : error ? (
+        <p className="empty-state empty-state--error">{error}</p>
       ) : !assets.length ? (
         <p className="empty-state empty-state--ok">No idle assets in this region.</p>
       ) : (

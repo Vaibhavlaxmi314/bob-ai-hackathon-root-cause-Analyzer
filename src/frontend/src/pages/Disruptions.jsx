@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getImpact, reroute } from '../api/client';
 
 const severityClass = (s) => s >= 8 ? 'badge badge--red' : s >= 5 ? 'badge badge--orange' : 'badge badge--green';
@@ -30,26 +30,39 @@ function SkeletonTable() {
 export default function Disruptions() {
   const [shipments,      setShipments]      = useState([]);
   const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState(null);
   const [rerouteData,    setRerouteData]    = useState({});
   const [loadingReroute, setLoadingReroute] = useState({});
+  const [rerouteError,   setRerouteError]   = useState({});
 
   useEffect(() => {
     getImpact()
       .then(r => { setShipments(r.data.shipments); setLoading(false); })
-      .catch(()  => setLoading(false));
+      .catch((err) => {
+        console.error('Disruptions fetch failed:', err);
+        setError('Failed to load disruption data. Is the backend running?');
+        setLoading(false);
+      });
   }, []);
 
   const handleReroute = (id) => {
     setLoadingReroute(p => ({ ...p, [id]: true }));
+    setRerouteError(p => ({ ...p, [id]: null }));
     reroute(id)
       .then(r => {
         setRerouteData(p => ({ ...p, [id]: r.data }));
         setLoadingReroute(p => ({ ...p, [id]: false }));
       })
-      .catch(() => setLoadingReroute(p => ({ ...p, [id]: false })));
+      .catch((err) => {
+        console.error(`Reroute failed for shipment ${id}:`, err);
+        setRerouteError(p => ({ ...p, [id]: 'Reroute failed. Please try again.' }));
+        setLoadingReroute(p => ({ ...p, [id]: false }));
+      });
   };
 
   if (loading) return <SkeletonTable />;
+
+  if (error) return <p className="empty-state empty-state--error">{error}</p>;
 
   if (!shipments.length) return (
     <p className="empty-state empty-state--ok">No shipments currently affected by active disruptions.</p>
@@ -72,8 +85,8 @@ export default function Disruptions() {
         </thead>
         <tbody>
           {shipments.map(s => (
-            <>
-              <tr key={s.shipment_id}>
+            <React.Fragment key={s.shipment_id}>
+              <tr>
                 <td style={{ fontWeight: 700 }}>{s.shipment_ref}</td>
                 <td>{s.origin} → {s.destination}</td>
                 <td>{s.cargo_type}</td>
@@ -98,8 +111,17 @@ export default function Disruptions() {
                 </td>
               </tr>
 
+              {rerouteError[s.shipment_id] && (
+                <tr className="row-expanded">
+                  <td colSpan={8}>
+                    <p style={{ color: 'var(--color-red)', margin: '8px 0', fontSize: 13 }}>
+                      {rerouteError[s.shipment_id]}
+                    </p>
+                  </td>
+                </tr>
+              )}
               {rerouteData[s.shipment_id] && (
-                <tr key={`r-${s.shipment_id}`} className="row-expanded">
+                <tr className="row-expanded">
                   <td colSpan={8}>
                     <div className="reroute-panel">
                       <div className="reroute-panel__title">
@@ -115,7 +137,7 @@ export default function Disruptions() {
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

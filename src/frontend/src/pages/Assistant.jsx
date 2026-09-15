@@ -36,7 +36,8 @@ export default function Assistant() {
         setLoading(false);
         setQuery('');
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('Agent query failed:', err);
         setHistory(h => [...h, { role: 'assistant', text: 'Error contacting the assistant. Is the backend running?' }]);
         setLoading(false);
       });

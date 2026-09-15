@@ -4,7 +4,10 @@ calls watsonx.ai to produce a natural-language response.
 Called via POST /api/agent/query from the dashboard.
 """
 import json
+import logging
 from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
 
 from tools.shipment_impact import analyze_shipment_impact
 from tools.rerouting import get_rerouting_recommendation
@@ -58,37 +61,41 @@ def run_query(user_input: str, db: Session) -> dict:
     context_parts = [f"OPERATOR QUERY: {user_input}\n"]
 
     if "impact" in tool_results:
-        affected = tool_results["impact"]
+        affected = tool_results["impact"] or []
+        top = affected[0] if affected else None
         context_parts.append(
             f"SHIPMENT IMPACT: {len(affected)} shipments affected by active disruptions. "
-            + (f"Top affected: {affected[0]['shipment_ref']} ({affected[0]['origin']} → {affected[0]['destination']}, "
-               f"severity {affected[0]['impact_severity']}/10, disruption: {affected[0]['disruption']['region']})."
-               if affected else "No shipments currently affected.")
+            + (f"Top affected: {top['shipment_ref']} ({top['origin']} → {top['destination']}, "
+               f"severity {top['impact_severity']}/10, disruption: {top['disruption']['region']})."
+               if top else "No shipments currently affected.")
         )
 
     if "rerouting" in tool_results:
         for r in tool_results["rerouting"]:
-            if r.get("recommendations"):
+            recs = r.get("recommendations") or []
+            if recs:
                 context_parts.append(
-                    f"REROUTING {r['shipment_ref']}: Best option — {r['recommendations'][0]['details'][:120]}..."
+                    f"REROUTING {r.get('shipment_ref', 'unknown')}: Best option — {recs[0]['details'][:120]}..."
                 )
 
     if "fleet" in tool_results:
-        fleet = tool_results["fleet"]
+        fleet = tool_results["fleet"] or []
+        top_asset = fleet[0] if fleet else None
         context_parts.append(
             f"IDLE FLEET: {len(fleet)} assets available. "
-            + (f"Largest: {fleet[0]['asset_ref']} ({fleet[0]['asset_type']}, "
-               f"{fleet[0]['capacity_tonnes']}t, {fleet[0]['location']})." if fleet else "No idle assets.")
+            + (f"Largest: {top_asset['asset_ref']} ({top_asset['asset_type']}, "
+               f"{top_asset['capacity_tonnes']}t, {top_asset['location']})." if top_asset else "No idle assets.")
         )
 
     if "cold_chain" in tool_results:
-        cc = tool_results["cold_chain"]
-        critical = [a for a in cc if a["severity"] == "CRITICAL"]
+        cc = tool_results["cold_chain"] or []
+        critical = [a for a in cc if a.get("severity") == "CRITICAL"]
+        top_crit = critical[0] if critical else None
         context_parts.append(
             f"COLD CHAIN: {len(cc)} excursion alerts. "
             f"{len(critical)} CRITICAL. "
-            + (f"Most severe: {critical[0]['shipment_ref']} at {critical[0]['excursion_temp']}°C "
-               f"(safe range {critical[0]['safe_range']})." if critical else "")
+            + (f"Most severe: {top_crit['shipment_ref']} at {top_crit['excursion_temp']}°C "
+               f"(safe range {top_crit['safe_range']})." if top_crit else "")
         )
 
     synthesis_prompt = (
@@ -97,7 +104,11 @@ def run_query(user_input: str, db: Session) -> dict:
         + "\n\nProvide a clear, actionable 3-5 sentence response to the operator's query."
     )
 
-    response_text = generate(synthesis_prompt)
+    try:
+        response_text = generate(synthesis_prompt)
+    except Exception as exc:
+        logger.error("Agent synthesis generate failed: %s", exc)
+        response_text = "Unable to generate a response at this time. Please try again."
 
     return {
         "query": user_input,

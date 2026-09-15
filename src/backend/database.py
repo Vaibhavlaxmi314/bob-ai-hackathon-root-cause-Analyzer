@@ -1,7 +1,10 @@
 import json
+import logging
 import os
 from datetime import datetime
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
@@ -27,6 +30,19 @@ def _parse_dt(s):
     return datetime.fromisoformat(s) if s else None
 
 
+def _load_seed(filename: str) -> list:
+    """Read a seed JSON file; return empty list and log a warning if missing."""
+    path = SEED_DIR / filename
+    try:
+        return json.loads(path.read_text())
+    except FileNotFoundError:
+        logger.warning("Seed file not found, skipping: %s", path)
+        return []
+    except json.JSONDecodeError as exc:
+        logger.error("Malformed seed file %s: %s", path, exc)
+        return []
+
+
 def init_db():
     """Create tables and seed data if the DB is brand new."""
     Base.metadata.create_all(bind=engine)
@@ -37,8 +53,7 @@ def init_db():
             return
 
         # --- Disruptions ---
-        disruptions = json.loads((SEED_DIR / "disruptions.json").read_text())
-        for d in disruptions:
+        for d in _load_seed("disruptions.json"):
             session.add(DisruptionEvent(
                 id=d["id"],
                 event_type=d["event_type"],
@@ -51,8 +66,7 @@ def init_db():
             ))
 
         # --- Shipments + Legs ---
-        shipments_data = json.loads((SEED_DIR / "shipments.json").read_text())
-        for s in shipments_data:
+        for s in _load_seed("shipments.json"):
             shipment = Shipment(
                 id=s["id"],
                 shipment_ref=s["shipment_ref"],
@@ -78,8 +92,7 @@ def init_db():
                 ))
 
         # --- Fleet Assets ---
-        fleet_data = json.loads((SEED_DIR / "fleet.json").read_text())
-        for f in fleet_data:
+        for f in _load_seed("fleet.json"):
             session.add(FleetAsset(
                 id=f["id"],
                 asset_ref=f["asset_ref"],
@@ -91,8 +104,7 @@ def init_db():
             ))
 
         # --- IoT Sensor Logs ---
-        iot_data = json.loads((SEED_DIR / "iot_logs.json").read_text())
-        for entry in iot_data:
+        for entry in _load_seed("iot_logs.json"):
             for reading in entry["readings"]:
                 temp = reading["temp_celsius"]
                 is_excursion = temp < entry["safe_min"] or temp > entry["safe_max"]
@@ -108,7 +120,7 @@ def init_db():
                 ))
 
         session.commit()
-        print(f"[DB] Seeded database at {DB_PATH}")
+        logger.info("Seeded database at %s", DB_PATH)
 
 
 def get_db():

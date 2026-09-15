@@ -34,11 +34,16 @@ function SkeletonTable() {
 export default function ColdChain() {
   const [data,    setData]    = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState(null);
 
   useEffect(() => {
     getColdChain()
       .then(r => { setData(r.data); setLoading(false); })
-      .catch(()  => setLoading(false));
+      .catch((err) => {
+        console.error('ColdChain fetch failed:', err);
+        setError('Failed to load cold chain data. Is the backend running?');
+        setLoading(false);
+      });
   }, []);
 
   if (loading) return (
@@ -51,6 +56,8 @@ export default function ColdChain() {
       <SkeletonTable />
     </>
   );
+
+  if (error) return <p className="empty-state empty-state--error">{error}</p>;
 
   if (!data || !data.alerts.length) return (
     <p className="empty-state empty-state--ok">No cold chain excursions detected.</p>

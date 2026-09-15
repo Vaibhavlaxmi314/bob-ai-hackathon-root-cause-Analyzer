@@ -3,9 +3,12 @@ Tool 4 — Cold Chain IoT Monitor
 Scans IoT sensor logs for temperature excursions.
 Calls watsonx.ai Granite to classify severity and recommend action.
 """
+import logging
 from sqlalchemy.orm import Session
 from models import IotSensorLog
 from watsonx_client import generate
+
+logger = logging.getLogger(__name__)
 
 
 def monitor_cold_chain(db: Session) -> list[dict]:
@@ -35,6 +38,7 @@ def monitor_cold_chain(db: Session) -> list[dict]:
             if deviation > prev_dev:
                 worst[log.shipment_id] = (log, deviation)
 
+    needs_commit = False
     alerts = []
     for shipment_id, (log, _) in worst.items():
         # Call Granite if not already classified
@@ -51,12 +55,16 @@ def monitor_cold_chain(db: Session) -> list[dict]:
                 f"REPORTABLE BREACH, or CRITICAL. Provide a recommended action. "
                 f"Start your response with 'SEVERITY: <level>.' then 'ACTION: <action>.'"
             )
-            response = generate(prompt)
+            try:
+                response = generate(prompt)
+            except Exception as exc:
+                logger.error("Cold chain generate failed for shipment %s: %s", shipment_id, exc)
+                response = ""
             severity, action = _parse_cold_chain_response(response)
             log.severity = severity
             log.action = action
-            db.commit()
-        
+            needs_commit = True
+
         alerts.append({
             "shipment_id": log.shipment_id,
             "shipment_ref": log.shipment_ref,
@@ -69,6 +77,14 @@ def monitor_cold_chain(db: Session) -> list[dict]:
             "severity": log.severity,
             "action": log.action,
         })
+
+    # Persist all severity classifications in a single transaction
+    if needs_commit:
+        try:
+            db.commit()
+        except Exception as exc:
+            logger.error("Cold chain DB commit failed: %s", exc)
+            db.rollback()
 
     # Sort by severity: CRITICAL first, then REPORTABLE BREACH, then MINOR
     severity_order = {"CRITICAL": 0, "REPORTABLE BREACH": 1, "MINOR DEVIATION": 2}

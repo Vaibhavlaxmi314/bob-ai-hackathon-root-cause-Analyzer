@@ -1,8 +1,10 @@
+from typing import Any, Optional
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from pydantic import BaseModel
 from database import get_db
+from models import DisruptionEvent, Shipment, FleetAsset
 from tools.shipment_impact import analyze_shipment_impact
 from tools.rerouting import get_rerouting_recommendation
 from tools.fleet_scanner import scan_idle_fleet
@@ -13,9 +15,66 @@ router = APIRouter(prefix="/api")
 
 
 # ---------------------------------------------------------------------------
+# Response models
+# ---------------------------------------------------------------------------
+class DisruptionImpactResponse(BaseModel):
+    total_affected: int
+    shipments: list[Any]
+
+class DisruptionEventOut(BaseModel):
+    id: int
+    event_type: str
+    region: str
+    severity: float
+    description: str
+    active: bool
+    started_at: Optional[str]
+    estimated_end: Optional[str]
+
+class FleetIdleResponse(BaseModel):
+    total_idle: int
+    filter_region: Optional[str]
+    assets: list[Any]
+
+class FleetAssetOut(BaseModel):
+    id: int
+    asset_ref: str
+    asset_type: str
+    location: str
+    region: str
+    capacity_tonnes: float
+    status: str
+
+class ColdChainResponse(BaseModel):
+    total_alerts: int
+    critical: int
+    reportable: int
+    minor: int
+    alerts: list[Any]
+
+class ShipmentOut(BaseModel):
+    id: int
+    shipment_ref: str
+    origin: str
+    destination: str
+    cargo_type: str
+    cargo_value_usd: float
+    priority: str
+    carrier: str
+    status: str
+    affected: bool
+    impact_severity: Optional[float]
+    eta: Optional[str]
+
+class QueryRequest(BaseModel):
+    query: str
+
+
+# ---------------------------------------------------------------------------
 # Tool 1 — Disruption Impact
 # ---------------------------------------------------------------------------
-@router.get("/disruptions/impact", summary="List all shipments affected by active disruptions")
+@router.get("/disruptions/impact", response_model=DisruptionImpactResponse,
+            summary="List all shipments affected by active disruptions")
 def disruptions_impact(db: Session = Depends(get_db)):
     results = analyze_shipment_impact(db)
     return {
@@ -24,9 +83,9 @@ def disruptions_impact(db: Session = Depends(get_db)):
     }
 
 
-@router.get("/disruptions", summary="List all disruption events")
+@router.get("/disruptions", response_model=list[DisruptionEventOut],
+            summary="List all disruption events")
 def list_disruptions(db: Session = Depends(get_db)):
-    from models import DisruptionEvent
     events = db.query(DisruptionEvent).all()
     return [
         {
@@ -46,8 +105,9 @@ def list_disruptions(db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 # Tool 3 — Fleet Asset Scanner
 # ---------------------------------------------------------------------------
-@router.get("/fleet/idle", summary="List idle fleet assets available for redeployment")
-def fleet_idle(region: str | None = None, db: Session = Depends(get_db)):
+@router.get("/fleet/idle", response_model=FleetIdleResponse,
+            summary="List idle fleet assets available for redeployment")
+def fleet_idle(region: Optional[str] = None, db: Session = Depends(get_db)):
     assets = scan_idle_fleet(db, region=region)
     return {
         "total_idle": len(assets),
@@ -56,9 +116,9 @@ def fleet_idle(region: str | None = None, db: Session = Depends(get_db)):
     }
 
 
-@router.get("/fleet", summary="List all fleet assets")
+@router.get("/fleet", response_model=list[FleetAssetOut],
+            summary="List all fleet assets")
 def list_fleet(db: Session = Depends(get_db)):
-    from models import FleetAsset
     assets = db.query(FleetAsset).all()
     return [
         {
@@ -77,7 +137,8 @@ def list_fleet(db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 # Tool 4 — Cold Chain Monitor
 # ---------------------------------------------------------------------------
-@router.get("/coldchain/alerts", summary="Get cold chain excursion alerts for all refrigerated shipments")
+@router.get("/coldchain/alerts", response_model=ColdChainResponse,
+            summary="Get cold chain excursion alerts for all refrigerated shipments")
 def coldchain_alerts(db: Session = Depends(get_db)):
     alerts = monitor_cold_chain(db)
     return {
@@ -92,7 +153,8 @@ def coldchain_alerts(db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 # Tool 2 — Re-routing
 # ---------------------------------------------------------------------------
-@router.post("/shipments/{shipment_id}/reroute", summary="Get rerouting recommendations for an affected shipment")
+@router.post("/shipments/{shipment_id}/reroute",
+             summary="Get rerouting recommendations for an affected shipment")
 def reroute_shipment(shipment_id: int, db: Session = Depends(get_db)):
     result = get_rerouting_recommendation(shipment_id, db)
     if "error" in result:
@@ -100,9 +162,9 @@ def reroute_shipment(shipment_id: int, db: Session = Depends(get_db)):
     return result
 
 
-@router.get("/shipments", summary="List all shipments")
+@router.get("/shipments", response_model=list[ShipmentOut],
+            summary="List all shipments")
 def list_shipments(db: Session = Depends(get_db)):
-    from models import Shipment
     shipments = db.query(Shipment).all()
     return [
         {
@@ -126,10 +188,6 @@ def list_shipments(db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 # Agent — natural language query endpoint
 # ---------------------------------------------------------------------------
-class QueryRequest(BaseModel):
-    query: str
-
-
 @router.post("/agent/query", summary="Ask the supply chain assistant a natural language question")
 def agent_query(body: QueryRequest, db: Session = Depends(get_db)):
     if not body.query.strip():
