@@ -8,7 +8,7 @@
 |---|---|
 | **Team Name** | root-cause-Analyzer |
 | **Track** | AI |
-| **Team Lead** | Vaibhavlaxmi — 26mca113@gmail.com |
+| **Team Lead** | Vaibhavlaxmi — 26mca113@charusat.edu.in |
 | **Members** | Kevina, Aayush, Abhishek |
 
 ---
