@@ -9,51 +9,64 @@
 # =============================================================================
 
 team:
-  name: ""                             # REQUIRED — e.g., "Orion Squad"
-  track: ""                            # REQUIRED — one of: AI | DevOps | Sustainability | Open
+  name: "root-cause-Analyzer"             # REQUIRED
+  track: "AI"                              # REQUIRED — one of: AI | DevOps | Sustainability | Open
   lead:
-    name: ""                           # REQUIRED — e.g., "Alice Chen"
-    email: ""                          # REQUIRED — e.g., "alice.chen@ibm.com"
+    name: "Vaibhavlaxmi"                   # REQUIRED
+    email: "26mca113@gmail.com"            # REQUIRED
   members:
-    - name: ""                         # REQUIRED — Team member 1
+    - name: "Kevina"                       # REQUIRED — Team member 1
       email: ""
-    - name: ""                         # Add more members by copying the two lines above
+    - name: "Aayush"
       email: ""
-    - name: ""
+    - name: "Abhishek"
       email: ""
 
 submission:
-  title: ""                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
+  title: "Supply Chain Disruption Assistant & Fleet Utilisation Optimizer"   # REQUIRED
 
-  problem_statement: >                 # REQUIRED — 1-3 sentences. What problem? Who has it?
-    Replace this text with a concise description of the real-world problem
-    your project addresses and who experiences it.
+  problem_statement: >                 # REQUIRED
+    Global supply chains are continuously exposed to disruptions — port strikes, severe weather,
+    and geopolitical crises — that cascade silently across hundreds of active shipments simultaneously.
+    Logistics teams have no automated way to identify which shipments are trapped, find alternative
+    routes, locate idle fleet assets nearby, or detect cold chain temperature excursions before
+    they reach delivery, resulting in cargo losses exceeding $500,000 and 2–3x emergency freight costs.
 
-  solution_summary: >                  # REQUIRED — 1-3 sentences. What did you build?
-    Replace this text with a clear description of your solution
-    and how it addresses the problem above.
+  solution_summary: >                  # REQUIRED
+    We built an AI-powered operational assistant on IBM Bob that gives logistics teams a unified,
+    real-time view of supply chain disruptions. A Bob agent ingests simulated disruption events,
+    shipment manifests, fleet telemetry, and IoT temperature sensor logs, then uses watsonx.ai
+    Granite to identify affected shipments, recommend alternative routes, surface idle fleet assets
+    for redeployment, and classify cold chain excursion severity — all from a single React dashboard.
 
   key_features:                        # REQUIRED — List 3 to 5 specific features you implemented
-    - ""                               # e.g., "Real-time pipeline anomaly detection using watsonx.ai"
-    - ""
-    - ""
-    - ""                               # optional 4th
-    - ""                               # optional 5th
+    - "Disruption-to-Shipment Impact Mapping: cross-references live disruption events against active shipment legs to identify affected shipments with severity scores"
+    - "AI-Powered Re-routing Recommendations: Bob agent queries watsonx.ai Granite with route context to produce ranked carrier and route alternatives with plain-language reasoning"
+    - "Idle Fleet Asset Redeployment Scanner: analyses simulated fleet telemetry to surface idle trucks, containers, and reefer vessels near disrupted regions for redeployment"
+    - "Cold Chain Excursion Detection and Severity Classification: monitors IoT temperature sensor logs and uses watsonx.ai to classify breach severity and recommend action before delivery"
+    - "Unified React Operations Dashboard: presents all four analysis outputs in a single operational view without manual data aggregation across siloed systems"
 
   tech_stack:
-    languages: []                      # REQUIRED — e.g., ["Python", "TypeScript"]
-    frameworks: []                     # e.g., ["FastAPI", "React"]
-    ibm_technologies: []               # e.g., ["watsonx.ai", "IBM Bob", "IBM Cloud Functions"]
-    databases: []                      # e.g., ["PostgreSQL", "Redis"]
-    other: []                          # e.g., ["Docker", "GitHub Actions", "Slack API"]
+    languages: ["Python", "JavaScript"]
+    frameworks: ["FastAPI", "IBM Bob SDK", "React 18"]
+    ibm_technologies: ["IBM Bob", "watsonx.ai"]
+    databases: ["SQLite"]
+    other: ["GitHub Actions", "MCP Protocol", "simulated JSON/CSV seed data"]
 
-  what_we_are_most_proud_of: >         # Optional but recommended — guides judges to your best work
-    Replace with what aspect of the submission you consider strongest
-    and want judges to pay special attention to.
+  what_we_are_most_proud_of: >         # Optional but recommended
+    The cold chain excursion detection and severity classification pipeline is our strongest feature.
+    Connecting IoT time-series temperature data to a watsonx.ai Granite classification call —
+    with structured context about cargo type, excursion magnitude, and duration — produces genuinely
+    useful severity assessments and action recommendations. This directly addresses the $500K+ cargo
+    loss scenario in the problem statement and demonstrates meaningful, grounded use of IBM Bob and
+    watsonx.ai together rather than a surface-level integration.
 
-  known_limitations: >                 # Optional but recommended — be honest about gaps
-    Replace with any known limitations, incomplete features,
-    or shortcuts taken due to time constraints.
+  known_limitations: >                 # Optional but recommended
+    All disruption events, shipment manifests, fleet telemetry, and IoT sensor logs are simulated
+    JSON/CSV files seeded at startup — no live third-party APIs or carrier systems are integrated.
+    The FastAPI backend and React dashboard have no authentication layer in this prototype.
+    The solution runs locally as a single process; production deployment infrastructure and
+    horizontal scaling are not included in this submission.
 
 # =============================================================================
 # ARTIFACT LOCATIONS

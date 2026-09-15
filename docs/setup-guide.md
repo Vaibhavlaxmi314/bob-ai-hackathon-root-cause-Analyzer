@@ -4,76 +4,108 @@
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have the following installed and available:
 
-- [ ] [e.g., Python 3.11+]
-- [ ] [e.g., Node.js 18+]
-- [ ] [e.g., Docker Desktop]
-- [ ] [e.g., An IBM Cloud account with watsonx.ai access]
+- [ ] Python 3.11 or higher (`python --version`)
+- [ ] Node.js 18 or higher (`node --version`) — for the React dashboard
+- [ ] An IBM Cloud account with watsonx.ai access
+- [ ] Your `WATSONX_API_KEY`, `WATSONX_PROJECT_ID`, and `WATSONX_URL` from the IBM watsonx.ai console
 
 ## Environment Variables
 
 Copy `.env.example` to `.env` and fill in the values:
 
 ```bash
-cp .env.example .env
+cp src/.env.example src/backend/.env
 ```
 
 | Variable | Description | Required |
 |---|---|---|
-| `WATSONX_API_KEY` | Your IBM watsonx.ai API key | Yes |
+| `WATSONX_API_KEY` | Your IBM watsonx.ai API key from cloud.ibm.com | Yes |
 | `WATSONX_PROJECT_ID` | Your watsonx.ai project ID | Yes |
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `SLACK_WEBHOOK_URL` | Slack webhook for alerts | No |
+| `WATSONX_URL` | watsonx.ai endpoint — e.g. `https://us-south.ml.cloud.ibm.com` | Yes |
+| `APP_PORT` | Backend port (default: `8000`) | No |
+| `APP_ENV` | Environment flag — `development` or `production` | No |
 
 ## Installation
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/[your-org]/[your-repo].git
-cd [your-repo]
+git clone https://github.com/root-cause-Analyzer/bob-ai-hackathon-root-cause-Analyzer.git
+cd bob-ai-hackathon-root-cause-Analyzer
 
-# 2. Install backend dependencies
-[your command — e.g.: pip install -r requirements.txt]
+# 2. Set up the Python virtual environment
+cd src/backend
+python -m venv .venv
 
-# 3. Install frontend dependencies (if applicable)
-[your command — e.g.: cd frontend && npm install]
+# Activate — Windows
+.venv\Scripts\activate
 
-# 4. Set up the database (if applicable)
-[your command — e.g.: python manage.py migrate]
+# Activate — macOS / Linux
+# source .venv/bin/activate
+
+# 3. Install backend dependencies
+pip install -r requirements.txt
+
+# 4. Install React dashboard dependencies (separate terminal)
+cd ../frontend
+npm install
 ```
 
 ## Running the Application
 
 ```bash
-# Start the backend
-[your command — e.g.: uvicorn app.main:app --reload]
-
-# Start the frontend (in a separate terminal, if applicable)
-[your command — e.g.: cd frontend && npm run dev]
+# Terminal 1 — Start the FastAPI backend
+# (from src/backend/ with .venv activated)
+uvicorn main:app --reload --port 8000
 ```
 
-The application will be available at: `http://localhost:[PORT]`
+On first run, the backend automatically seeds the SQLite database with simulated data:
+- 15 active disruption events (storms, port strikes, geopolitical crises)
+- 120 active shipments with multi-leg routes
+- 80 fleet assets (trucks, containers, reefer vessels) with telemetry
+- IoT temperature sensor logs for all 38 refrigerated shipments
+
+```bash
+# Terminal 2 — Start the React dashboard
+# (from src/frontend/)
+npm run dev
+```
+
+| Service | URL |
+|---|---|
+| React Dashboard | `http://localhost:5173` |
+| FastAPI API | `http://localhost:8000` |
+| API Docs (Swagger) | `http://localhost:8000/docs` |
 
 ## Running Tests
 
 ```bash
-[your test command — e.g.: pytest tests/ -v]
+# From src/backend/ with .venv activated
+pytest tests/ -v
 ```
 
-## Quick Demo (Optional)
+## Quick Demo
 
-If you have a demo script or sample data to showcase the project quickly:
+To see a full disruption scenario end-to-end without interacting with the dashboard:
 
 ```bash
-[e.g.: python demo/seed_demo_data.py]
-[e.g.: open http://localhost:8000/demo]
+# From src/backend/ with .venv activated
+# Triggers a simulated port strike affecting 12 shipments and prints recommendations
+python demo/run_demo_scenario.py --scenario port_strike_rotterdam
 ```
+
+This script will:
+1. Inject a simulated Rotterdam port strike disruption event
+2. Run the Shipment Impact Analyzer across all active shipments
+3. Call watsonx.ai to generate rerouting recommendations for the top 3 affected shipments
+4. Scan fleet telemetry for idle assets near Rotterdam
+5. Print the full structured output to stdout
 
 ## Troubleshooting
 
 | Issue | Solution |
 |---|---|
-| [e.g., `ModuleNotFoundError`] | [e.g., Run `pip install -r requirements.txt` again] |
-| [e.g., Database connection refused] | [e.g., Ensure PostgreSQL is running: `docker compose up db`] |
-| [e.g., watsonx.ai 401 error] | [e.g., Check `WATSONX_API_KEY` in your `.env` file] |
+| `401 Unauthorized` from watsonx.ai | Check that `WATSONX_API_KEY` and `WATSONX_PROJECT_ID` are correctly set in `src/backend/.env` and that the key has not expired |
+| `ModuleNotFoundError` on startup | Ensure the virtual environment is activated (`source .venv/bin/activate`) and run `pip install -r requirements.txt` again |
+| React dashboard shows blank / no data | Confirm the FastAPI backend is running on port 8000 and that the SQLite database was seeded (look for `supply_chain.db` in `src/backend/`) |

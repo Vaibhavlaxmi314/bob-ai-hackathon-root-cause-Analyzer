@@ -1,0 +1,17 @@
+[
+  {"id": 1,  "asset_ref": "TRUCK-001", "asset_type": "truck",     "location": "Rotterdam Depot",   "region": "Rotterdam",       "capacity_tonnes": 24.0,  "status": "idle"},
+  {"id": 2,  "asset_ref": "TRUCK-002", "asset_type": "truck",     "location": "Antwerp Yard",      "region": "Rotterdam",       "capacity_tonnes": 20.0,  "status": "idle"},
+  {"id": 3,  "asset_ref": "TRUCK-003", "asset_type": "truck",     "location": "Hamburg Depot",     "region": "Rotterdam",       "capacity_tonnes": 22.0,  "status": "in_use"},
+  {"id": 4,  "asset_ref": "REEFER-001","asset_type": "reefer",    "location": "Rotterdam Cold Hub","region": "Rotterdam",       "capacity_tonnes": 18.0,  "status": "idle"},
+  {"id": 5,  "asset_ref": "REEFER-002","asset_type": "reefer",    "location": "Amsterdam Port",    "region": "Rotterdam",       "capacity_tonnes": 16.0,  "status": "idle"},
+  {"id": 6,  "asset_ref": "VESSEL-001","asset_type": "vessel",    "location": "North Sea",         "region": "Rotterdam",       "capacity_tonnes": 5000.0,"status": "idle"},
+  {"id": 7,  "asset_ref": "TRUCK-004", "asset_type": "truck",     "location": "LA Distribution",   "region": "Los Angeles",     "capacity_tonnes": 26.0,  "status": "idle"},
+  {"id": 8,  "asset_ref": "TRUCK-005", "asset_type": "truck",     "location": "Long Beach Yard",   "region": "Los Angeles",     "capacity_tonnes": 20.0,  "status": "idle"},
+  {"id": 9,  "asset_ref": "REEFER-003","asset_type": "reefer",    "location": "LA Cold Storage",   "region": "Los Angeles",     "capacity_tonnes": 15.0,  "status": "maintenance"},
+  {"id": 10, "asset_ref": "VESSEL-002","asset_type": "vessel",    "location": "Pacific Holding",   "region": "South China Sea", "capacity_tonnes": 3500.0,"status": "idle"},
+  {"id": 11, "asset_ref": "VESSEL-003","asset_type": "vessel",    "location": "Singapore Anchorage","region": "South China Sea","capacity_tonnes": 4200.0,"status": "idle"},
+  {"id": 12, "asset_ref": "TRUCK-006", "asset_type": "truck",     "location": "Singapore Depot",   "region": "South China Sea", "capacity_tonnes": 18.0,  "status": "in_use"},
+  {"id": 13, "asset_ref": "VESSEL-004","asset_type": "vessel",    "location": "Suez Waiting Area", "region": "Suez Canal",      "capacity_tonnes": 6000.0,"status": "idle"},
+  {"id": 14, "asset_ref": "REEFER-004","asset_type": "reefer",    "location": "Port Said Depot",   "region": "Suez Canal",      "capacity_tonnes": 14.0,  "status": "idle"},
+  {"id": 15, "asset_ref": "TRUCK-007", "asset_type": "truck",     "location": "Dubai Freezone",    "region": "Arabian Sea",     "capacity_tonnes": 22.0,  "status": "idle"}
+]

@@ -1,15 +1,11 @@
-https://youtu.be/your-demo-video-link-here
+VIDEO PENDING — will be added before final submission
 
-Replace the URL above with a link to your demo video.
+This video will demonstrate:
+- Disruption event ingestion and shipment impact mapping
+- AI-powered re-routing recommendations via watsonx.ai
+- Idle fleet asset redeployment scanning
+- Cold chain excursion detection and severity classification
+- React operations dashboard walkthrough
 
-Accepted platforms:
-  - YouTube (public or unlisted)
-  - Loom (https://www.loom.com/share/...)
-  - IBM Box (https://ibm.box.com/s/...)
-  - Google Drive (set to "Anyone with the link can view")
-
-Video requirements:
-  - Length: 3–5 minutes maximum
-  - Must show the application running (not just slides)
-  - Should walk through at least one key feature end-to-end
-  - Audio narration strongly recommended
+Accepted platforms: YouTube (public or unlisted), Loom, IBM Box, Google Drive (Anyone with link)
+Length: 3–5 minutes maximum

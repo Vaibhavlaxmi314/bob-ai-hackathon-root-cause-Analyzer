@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "event_type": "port_strike",
+    "region": "Rotterdam",
+    "severity": 9,
+    "description": "Dock workers strike at Port of Rotterdam halting all container operations. Estimated 72-hour closure.",
+    "active": true,
+    "started_at": "2024-06-01T06:00:00",
+    "estimated_end": "2024-06-04T06:00:00"
+  },
+  {
+    "id": 2,
+    "event_type": "weather",
+    "region": "South China Sea",
+    "severity": 8,
+    "description": "Typhoon Mawar forcing vessel rerouting. All shipping lanes between Hong Kong and Manila closed.",
+    "active": true,
+    "started_at": "2024-06-02T12:00:00",
+    "estimated_end": "2024-06-05T00:00:00"
+  },
+  {
+    "id": 3,
+    "event_type": "geopolitical",
+    "region": "Suez Canal",
+    "severity": 10,
+    "description": "Canal closure due to regional conflict. All vessels diverting via Cape of Good Hope adding 10-14 days.",
+    "active": true,
+    "started_at": "2024-05-28T00:00:00",
+    "estimated_end": null
+  },
+  {
+    "id": 4,
+    "event_type": "port_strike",
+    "region": "Los Angeles",
+    "severity": 7,
+    "description": "ILWU slowdown at Port of Los Angeles causing 4-6 day processing delays for inbound containers.",
+    "active": true,
+    "started_at": "2024-06-03T08:00:00",
+    "estimated_end": "2024-06-07T08:00:00"
+  },
+  {
+    "id": 5,
+    "event_type": "weather",
+    "region": "Gulf of Mexico",
+    "severity": 6,
+    "description": "Hurricane warning in Gulf of Mexico. Offshore and coastal shipping suspended.",
+    "active": false,
+    "started_at": "2024-05-25T00:00:00",
+    "estimated_end": "2024-05-27T00:00:00"
+  }
+]

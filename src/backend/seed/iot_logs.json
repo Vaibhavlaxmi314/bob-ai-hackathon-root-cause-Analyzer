@@ -1,0 +1,58 @@
+[
+  {"shipment_id": 2,  "shipment_ref": "SHP-002", "cargo_type": "refrigerated", "safe_min": 2.0,  "safe_max": 8.0,  "readings": [
+    {"recorded_at": "2024-06-03T08:00:00", "temp_celsius": 4.5},
+    {"recorded_at": "2024-06-03T10:00:00", "temp_celsius": 5.1},
+    {"recorded_at": "2024-06-03T12:00:00", "temp_celsius": 7.8},
+    {"recorded_at": "2024-06-03T14:00:00", "temp_celsius": 11.2},
+    {"recorded_at": "2024-06-03T16:00:00", "temp_celsius": 13.5}
+  ]},
+  {"shipment_id": 4,  "shipment_ref": "SHP-004", "cargo_type": "refrigerated", "safe_min": 2.0,  "safe_max": 8.0,  "readings": [
+    {"recorded_at": "2024-06-03T07:00:00", "temp_celsius": 3.2},
+    {"recorded_at": "2024-06-03T09:00:00", "temp_celsius": 4.0},
+    {"recorded_at": "2024-06-03T11:00:00", "temp_celsius": 6.5},
+    {"recorded_at": "2024-06-03T13:00:00", "temp_celsius": 7.9}
+  ]},
+  {"shipment_id": 6,  "shipment_ref": "SHP-006", "cargo_type": "refrigerated", "safe_min": -20.0,"safe_max": -15.0,"readings": [
+    {"recorded_at": "2024-06-03T06:00:00", "temp_celsius": -18.5},
+    {"recorded_at": "2024-06-03T08:00:00", "temp_celsius": -17.2},
+    {"recorded_at": "2024-06-03T10:00:00", "temp_celsius": -14.1},
+    {"recorded_at": "2024-06-03T12:00:00", "temp_celsius": -10.3},
+    {"recorded_at": "2024-06-03T14:00:00", "temp_celsius": -8.0}
+  ]},
+  {"shipment_id": 9,  "shipment_ref": "SHP-009", "cargo_type": "refrigerated", "safe_min": 0.0,  "safe_max": 4.0,  "readings": [
+    {"recorded_at": "2024-06-03T05:00:00", "temp_celsius": 1.5},
+    {"recorded_at": "2024-06-03T07:00:00", "temp_celsius": 2.1},
+    {"recorded_at": "2024-06-03T09:00:00", "temp_celsius": 3.8},
+    {"recorded_at": "2024-06-03T11:00:00", "temp_celsius": 4.2}
+  ]},
+  {"shipment_id": 12, "shipment_ref": "SHP-012", "cargo_type": "refrigerated", "safe_min": 2.0,  "safe_max": 8.0,  "readings": [
+    {"recorded_at": "2024-06-03T04:00:00", "temp_celsius": 5.5},
+    {"recorded_at": "2024-06-03T06:00:00", "temp_celsius": 6.0},
+    {"recorded_at": "2024-06-03T08:00:00", "temp_celsius": 7.5},
+    {"recorded_at": "2024-06-03T10:00:00", "temp_celsius": 7.9}
+  ]},
+  {"shipment_id": 15, "shipment_ref": "SHP-015", "cargo_type": "refrigerated", "safe_min": 2.0,  "safe_max": 8.0,  "readings": [
+    {"recorded_at": "2024-06-03T03:00:00", "temp_celsius": 3.0},
+    {"recorded_at": "2024-06-03T05:00:00", "temp_celsius": 8.5},
+    {"recorded_at": "2024-06-03T07:00:00", "temp_celsius": 12.0},
+    {"recorded_at": "2024-06-03T09:00:00", "temp_celsius": 16.3}
+  ]},
+  {"shipment_id": 17, "shipment_ref": "SHP-017", "cargo_type": "refrigerated", "safe_min": 2.0,  "safe_max": 8.0,  "readings": [
+    {"recorded_at": "2024-06-03T08:00:00", "temp_celsius": 3.5},
+    {"recorded_at": "2024-06-03T10:00:00", "temp_celsius": 4.1},
+    {"recorded_at": "2024-06-03T12:00:00", "temp_celsius": 5.0},
+    {"recorded_at": "2024-06-03T14:00:00", "temp_celsius": 5.8}
+  ]},
+  {"shipment_id": 19, "shipment_ref": "SHP-019", "cargo_type": "refrigerated", "safe_min": 0.0,  "safe_max": 4.0,  "readings": [
+    {"recorded_at": "2024-06-03T06:00:00", "temp_celsius": 1.2},
+    {"recorded_at": "2024-06-03T08:00:00", "temp_celsius": 2.8},
+    {"recorded_at": "2024-06-03T10:00:00", "temp_celsius": 4.9},
+    {"recorded_at": "2024-06-03T12:00:00", "temp_celsius": 7.1}
+  ]},
+  {"shipment_id": 20, "shipment_ref": "SHP-020", "cargo_type": "refrigerated", "safe_min": 2.0,  "safe_max": 8.0,  "readings": [
+    {"recorded_at": "2024-06-03T05:00:00", "temp_celsius": 4.0},
+    {"recorded_at": "2024-06-03T07:00:00", "temp_celsius": 5.5},
+    {"recorded_at": "2024-06-03T09:00:00", "temp_celsius": 7.2},
+    {"recorded_at": "2024-06-03T11:00:00", "temp_celsius": 7.8}
+  ]}
+]

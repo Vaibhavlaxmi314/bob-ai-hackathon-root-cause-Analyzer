@@ -1,0 +1,179 @@
+[
+  {
+    "id": 1, "shipment_ref": "SHP-001", "origin": "Shanghai", "destination": "Hamburg",
+    "cargo_type": "general", "cargo_value_usd": 850000, "priority": "high",
+    "carrier": "Maersk", "eta": "2024-06-08T14:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Shanghai", "to_location": "Singapore", "via_region": "South China Sea", "mode": "vessel", "status": "completed"},
+      {"leg_order": 2, "from_location": "Singapore", "to_location": "Port Said", "via_region": "Suez Canal", "mode": "vessel", "status": "active"},
+      {"leg_order": 3, "from_location": "Port Said", "to_location": "Hamburg", "via_region": "Mediterranean", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 2, "shipment_ref": "SHP-002", "origin": "Los Angeles", "destination": "Chicago",
+    "cargo_type": "refrigerated", "cargo_value_usd": 620000, "priority": "high",
+    "carrier": "FedEx Freight", "eta": "2024-06-06T09:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Los Angeles Port", "to_location": "Los Angeles Warehouse", "via_region": "Los Angeles", "mode": "truck", "status": "active"},
+      {"leg_order": 2, "from_location": "Los Angeles Warehouse", "to_location": "Chicago", "via_region": "Interstate 80", "mode": "truck", "status": "pending"}
+    ]
+  },
+  {
+    "id": 3, "shipment_ref": "SHP-003", "origin": "Tokyo", "destination": "Rotterdam",
+    "cargo_type": "general", "cargo_value_usd": 1200000, "priority": "high",
+    "carrier": "Evergreen", "eta": "2024-06-10T08:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Tokyo", "to_location": "Hong Kong", "via_region": "South China Sea", "mode": "vessel", "status": "active"},
+      {"leg_order": 2, "from_location": "Hong Kong", "to_location": "Rotterdam", "via_region": "Rotterdam", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 4, "shipment_ref": "SHP-004", "origin": "Mumbai", "destination": "New York",
+    "cargo_type": "refrigerated", "cargo_value_usd": 540000, "priority": "normal",
+    "carrier": "MSC", "eta": "2024-06-12T16:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Mumbai", "to_location": "Aden", "via_region": "Arabian Sea", "mode": "vessel", "status": "completed"},
+      {"leg_order": 2, "from_location": "Aden", "to_location": "Port Said", "via_region": "Suez Canal", "mode": "vessel", "status": "active"},
+      {"leg_order": 3, "from_location": "Port Said", "to_location": "New York", "via_region": "Atlantic", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 5, "shipment_ref": "SHP-005", "origin": "Frankfurt", "destination": "Singapore",
+    "cargo_type": "general", "cargo_value_usd": 300000, "priority": "normal",
+    "carrier": "DHL Freight", "eta": "2024-06-09T11:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Frankfurt", "to_location": "Rotterdam Port", "via_region": "Rotterdam", "mode": "truck", "status": "active"},
+      {"leg_order": 2, "from_location": "Rotterdam Port", "to_location": "Singapore", "via_region": "Atlantic", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 6, "shipment_ref": "SHP-006", "origin": "Guangzhou", "destination": "Sydney",
+    "cargo_type": "refrigerated", "cargo_value_usd": 480000, "priority": "high",
+    "carrier": "COSCO", "eta": "2024-06-07T18:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Guangzhou", "to_location": "Manila", "via_region": "South China Sea", "mode": "vessel", "status": "active"},
+      {"leg_order": 2, "from_location": "Manila", "to_location": "Sydney", "via_region": "Pacific", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 7, "shipment_ref": "SHP-007", "origin": "Berlin", "destination": "Dubai",
+    "cargo_type": "general", "cargo_value_usd": 750000, "priority": "normal",
+    "carrier": "DB Schenker", "eta": "2024-06-11T10:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Berlin", "to_location": "Rotterdam Port", "via_region": "Rotterdam", "mode": "truck", "status": "active"},
+      {"leg_order": 2, "from_location": "Rotterdam Port", "to_location": "Suez Canal", "via_region": "Suez Canal", "mode": "vessel", "status": "pending"},
+      {"leg_order": 3, "from_location": "Suez Canal", "to_location": "Dubai", "via_region": "Red Sea", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 8, "shipment_ref": "SHP-008", "origin": "Seoul", "destination": "Los Angeles",
+    "cargo_type": "general", "cargo_value_usd": 920000, "priority": "high",
+    "carrier": "HMM", "eta": "2024-06-06T20:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Seoul", "to_location": "Los Angeles Port", "via_region": "Pacific", "mode": "vessel", "status": "active"},
+      {"leg_order": 2, "from_location": "Los Angeles Port", "to_location": "Los Angeles DC", "via_region": "Los Angeles", "mode": "truck", "status": "pending"}
+    ]
+  },
+  {
+    "id": 9, "shipment_ref": "SHP-009", "origin": "Cape Town", "destination": "London",
+    "cargo_type": "refrigerated", "cargo_value_usd": 390000, "priority": "normal",
+    "carrier": "Hapag-Lloyd", "eta": "2024-06-13T07:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Cape Town", "to_location": "Rotterdam", "via_region": "Rotterdam", "mode": "vessel", "status": "pending"},
+      {"leg_order": 2, "from_location": "Rotterdam", "to_location": "London", "via_region": "North Sea", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 10, "shipment_ref": "SHP-010", "origin": "Chicago", "destination": "Mexico City",
+    "cargo_type": "general", "cargo_value_usd": 210000, "priority": "low",
+    "carrier": "XPO Logistics", "eta": "2024-06-05T15:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Chicago", "to_location": "Mexico City", "via_region": "Central America", "mode": "truck", "status": "active"}
+    ]
+  },
+  {
+    "id": 11, "shipment_ref": "SHP-011", "origin": "Sydney", "destination": "Rotterdam",
+    "cargo_type": "general", "cargo_value_usd": 660000, "priority": "normal",
+    "carrier": "Maersk", "eta": "2024-06-15T12:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Sydney", "to_location": "Singapore", "via_region": "Pacific", "mode": "vessel", "status": "completed"},
+      {"leg_order": 2, "from_location": "Singapore", "to_location": "Rotterdam", "via_region": "Rotterdam", "mode": "vessel", "status": "active"}
+    ]
+  },
+  {
+    "id": 12, "shipment_ref": "SHP-012", "origin": "Bangkok", "destination": "Dubai",
+    "cargo_type": "refrigerated", "cargo_value_usd": 510000, "priority": "high",
+    "carrier": "Thai Airways Cargo", "eta": "2024-06-04T22:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Bangkok", "to_location": "Dubai", "via_region": "South China Sea", "mode": "air", "status": "active"}
+    ]
+  },
+  {
+    "id": 13, "shipment_ref": "SHP-013", "origin": "New York", "destination": "London",
+    "cargo_type": "general", "cargo_value_usd": 430000, "priority": "normal",
+    "carrier": "MSC", "eta": "2024-06-09T08:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "New York", "to_location": "London", "via_region": "Atlantic", "mode": "vessel", "status": "active"}
+    ]
+  },
+  {
+    "id": 14, "shipment_ref": "SHP-014", "origin": "Houston", "destination": "Rotterdam",
+    "cargo_type": "general", "cargo_value_usd": 780000, "priority": "high",
+    "carrier": "Crowley", "eta": "2024-06-10T14:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Houston", "to_location": "Rotterdam", "via_region": "Atlantic", "mode": "vessel", "status": "active"},
+      {"leg_order": 2, "from_location": "Rotterdam Port", "to_location": "Dusseldorf", "via_region": "Rotterdam", "mode": "truck", "status": "pending"}
+    ]
+  },
+  {
+    "id": 15, "shipment_ref": "SHP-015", "origin": "Cairo", "destination": "Mumbai",
+    "cargo_type": "refrigerated", "cargo_value_usd": 290000, "priority": "normal",
+    "carrier": "EgyptAir Cargo", "eta": "2024-06-06T06:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Cairo", "to_location": "Port Said", "via_region": "Suez Canal", "mode": "truck", "status": "active"},
+      {"leg_order": 2, "from_location": "Port Said", "to_location": "Mumbai", "via_region": "Arabian Sea", "mode": "vessel", "status": "pending"}
+    ]
+  },
+  {
+    "id": 16, "shipment_ref": "SHP-016", "origin": "Paris", "destination": "New York",
+    "cargo_type": "general", "cargo_value_usd": 340000, "priority": "normal",
+    "carrier": "Air France Cargo", "eta": "2024-06-05T18:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Paris", "to_location": "New York", "via_region": "Atlantic", "mode": "air", "status": "active"}
+    ]
+  },
+  {
+    "id": 17, "shipment_ref": "SHP-017", "origin": "Toronto", "destination": "Rotterdam",
+    "cargo_type": "refrigerated", "cargo_value_usd": 460000, "priority": "high",
+    "carrier": "MSC", "eta": "2024-06-11T16:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Toronto", "to_location": "Rotterdam", "via_region": "Rotterdam", "mode": "vessel", "status": "active"}
+    ]
+  },
+  {
+    "id": 18, "shipment_ref": "SHP-018", "origin": "Jakarta", "destination": "Osaka",
+    "cargo_type": "general", "cargo_value_usd": 225000, "priority": "low",
+    "carrier": "Evergreen", "eta": "2024-06-08T10:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Jakarta", "to_location": "Osaka", "via_region": "South China Sea", "mode": "vessel", "status": "active"}
+    ]
+  },
+  {
+    "id": 19, "shipment_ref": "SHP-019", "origin": "Lima", "destination": "Los Angeles",
+    "cargo_type": "refrigerated", "cargo_value_usd": 315000, "priority": "normal",
+    "carrier": "CSAV", "eta": "2024-06-07T12:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Lima", "to_location": "Los Angeles Port", "via_region": "Pacific", "mode": "vessel", "status": "active"},
+      {"leg_order": 2, "from_location": "Los Angeles Port", "to_location": "Los Angeles Cold Store", "via_region": "Los Angeles", "mode": "truck", "status": "pending"}
+    ]
+  },
+  {
+    "id": 20, "shipment_ref": "SHP-020", "origin": "Nairobi", "destination": "Dubai",
+    "cargo_type": "refrigerated", "cargo_value_usd": 570000, "priority": "high",
+    "carrier": "Kenya Airways Cargo", "eta": "2024-06-05T20:00:00", "status": "in_transit",
+    "legs": [
+      {"leg_order": 1, "from_location": "Nairobi", "to_location": "Port Said", "via_region": "Suez Canal", "mode": "air", "status": "active"},
+      {"leg_order": 2, "from_location": "Port Said", "to_location": "Dubai", "via_region": "Red Sea", "mode": "vessel", "status": "pending"}
+    ]
+  }
+]
