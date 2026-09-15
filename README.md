@@ -1,4 +1,4 @@
-# 🚀 []
+# 🚀 [Supply Chain Disruption Assistant & Fleet Utilisation Optimizer]
 
 > ⚠️ **Replace everything in `[ ]` brackets with your actual content before submission.**
 
@@ -8,10 +8,10 @@
 
 | Field | Value |
 |---|---|
-| **Team Name** | [Your Team Name] |
+| **Team Name** | [root-cause-Analyzer] |
 | **Track** | [AI / DevOps / Sustainability / Open] |
-| **Team Lead** | [Name] — [email@ibm.com] |
-| **Members** | [Name 1], [Name 2], [Name 3] |
+| **Team Lead** | [Vaibhavlaxmi] — [26mca113@gmail.com] |
+| **Members** | [Kevina], [Aayush], [Abhishek] |
 
 ---
 
@@ -19,7 +19,7 @@
 
 > In 2–3 sentences: What problem does your project solve? Who experiences this problem?
 
-[Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
+[Identifies which shipments are affected by an active disruption, recommends re-routing or carrier alternatives, identifies idle fleet assets for redeployment. Life Sciences & Healthcare Companies, Logistics & Fleet Managers, Food & Beverage Suppliers etc. ]
 
 ---
 
