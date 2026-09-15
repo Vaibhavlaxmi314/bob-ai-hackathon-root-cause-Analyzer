@@ -1,5 +1,5 @@
 VIDEO PENDING — will be added before final submission
-
+https://drive.google.com/file/d/1mPDmZMoSU4Pemx6qvQLp5SfCEuRFyMyH/view?usp=drive_link
 This video will demonstrate:
 - Disruption event ingestion and shipment impact mapping
 - AI-powered re-routing recommendations via watsonx.ai
