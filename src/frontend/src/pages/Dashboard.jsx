@@ -1,39 +1,54 @@
 import { useEffect, useState } from 'react';
 import { getImpact, getFleetIdle, getColdChain } from '../api/client';
+import StatCard from '../components/StatCard';
 
-const card = (label, value, color) => (
-  <div style={{ background: color, borderRadius: 8, padding: '20px 28px', minWidth: 160, color: '#fff' }}>
-    <div style={{ fontSize: 32, fontWeight: 700 }}>{value}</div>
-    <div style={{ fontSize: 13, marginTop: 4, opacity: 0.9 }}>{label}</div>
-  </div>
-);
+function SkeletonCard() {
+  return <div className="skeleton skeleton-card" />;
+}
 
 export default function Dashboard() {
-  const [data, setData] = useState({ affected: 0, idle: 0, critical: 0, alerts: 0 });
+  const [data, setData]       = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([getImpact(), getFleetIdle(), getColdChain()]).then(([imp, fleet, cold]) => {
-      setData({
-        affected: imp.data.total_affected,
-        idle: fleet.data.total_idle,
-        alerts: cold.data.total_alerts,
-        critical: cold.data.critical,
-      });
-    }).catch(() => {});
+    Promise.all([getImpact(), getFleetIdle(), getColdChain()])
+      .then(([imp, fleet, cold]) => {
+        setData({
+          affected: imp.data.total_affected,
+          idle:     fleet.data.total_idle,
+          alerts:   cold.data.total_alerts,
+          critical: cold.data.critical,
+        });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 24 }}>Operations Overview</h2>
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        {card('Affected Shipments', data.affected, '#c0392b')}
-        {card('Idle Fleet Assets', data.idle, '#2980b9')}
-        {card('Cold Chain Alerts', data.alerts, '#8e44ad')}
-        {card('Critical Excursions', data.critical, '#e67e22')}
+      <h2 className="page-title">Operations Overview</h2>
+
+      <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap', marginBottom: 'var(--space-7)' }}>
+        {loading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          <>
+            <StatCard icon="🚨" value={data.affected} label="Affected Shipments"  colorClass="red"    />
+            <StatCard icon="🚛" value={data.idle}     label="Idle Fleet Assets"   colorClass="blue"   />
+            <StatCard icon="🌡" value={data.alerts}   label="Cold Chain Alerts"   colorClass="purple" />
+            <StatCard icon="⚠️" value={data.critical} label="Critical Excursions" colorClass="orange" />
+          </>
+        )}
       </div>
-      <p style={{ marginTop: 32, color: '#555', fontSize: 14 }}>
+
+      <p style={{ color: 'var(--color-text-muted)', fontSize: 14, lineHeight: 1.6 }}>
         Use the tabs above to drill into Disruptions, Fleet Assets, or Cold Chain alerts.
-        Use the Assistant tab to ask questions in natural language.
+        Use the <strong>Assistant</strong> tab to ask questions in natural language.
       </p>
     </div>
   );

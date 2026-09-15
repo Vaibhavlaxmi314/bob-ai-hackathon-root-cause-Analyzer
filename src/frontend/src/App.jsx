@@ -6,11 +6,11 @@ import ColdChain from './pages/ColdChain';
 import Assistant from './pages/Assistant';
 
 const TABS = [
-  { id: 'dashboard',    label: '📊 Overview' },
-  { id: 'disruptions',  label: '🚨 Disruptions' },
-  { id: 'fleet',        label: '🚛 Fleet Assets' },
-  { id: 'coldchain',    label: '🌡 Cold Chain' },
-  { id: 'assistant',    label: '🤖 Assistant' },
+  { id: 'dashboard',   label: '📊 Overview' },
+  { id: 'disruptions', label: '🚨 Disruptions' },
+  { id: 'fleet',       label: '🚛 Fleet Assets' },
+  { id: 'coldchain',   label: '🌡 Cold Chain' },
+  { id: 'assistant',   label: '🤖 Assistant' },
 ];
 
 const PAGES = {
@@ -21,38 +21,44 @@ const PAGES = {
   assistant:   <Assistant />,
 };
 
+const ChainIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+  </svg>
+);
+
 export default function App() {
   const [tab, setTab] = useState('dashboard');
 
   return (
-    <div style={{ fontFamily: '-apple-system, "Segoe UI", sans-serif', minHeight: '100vh', background: '#f8f9fa' }}>
-      {/* Header */}
-      <div style={{ background: '#1a1a2e', color: '#fff', padding: '16px 32px' }}>
-        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>
-          Supply Chain Disruption Assistant
-        </h1>
-        <p style={{ margin: '4px 0 0', fontSize: 13, opacity: 0.7 }}>
-          Fleet Utilisation Optimizer · Powered by IBM Bob + watsonx.ai
-        </p>
-      </div>
+    <>
+      <header className="app-header">
+        <div className="app-header__logo" aria-hidden="true">
+          <ChainIcon />
+        </div>
+        <div className="app-header__titles">
+          <h1 className="app-header__title">Supply Chain Disruption Assistant</h1>
+          <p className="app-header__subtitle">Fleet Utilisation Optimizer &nbsp;·&nbsp; Powered by IBM Bob &amp; watsonx.ai</p>
+        </div>
+      </header>
 
-      {/* Tab bar */}
-      <div style={{ background: '#fff', borderBottom: '2px solid #e0e0e0', display: 'flex', paddingLeft: 32 }}>
+      <nav className="tab-bar" role="navigation" aria-label="Main navigation">
         {TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{
-            padding: '12px 20px', border: 'none', background: 'none', cursor: 'pointer',
-            fontSize: 14, fontWeight: tab === t.id ? 700 : 400,
-            borderBottom: tab === t.id ? '3px solid #2980b9' : '3px solid transparent',
-            color: tab === t.id ? '#2980b9' : '#444',
-            marginBottom: -2,
-          }}>{t.label}</button>
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`tab-bar__item${tab === t.id ? ' tab-bar__item--active' : ''}`}
+            aria-current={tab === t.id ? 'page' : undefined}
+          >
+            {t.label}
+          </button>
         ))}
-      </div>
+      </nav>
 
-      {/* Page content */}
-      <div style={{ padding: '32px', maxWidth: 1200, margin: '0 auto' }}>
+      <main className="page-content">
         {PAGES[tab]}
-      </div>
-    </div>
+      </main>
+    </>
   );
 }

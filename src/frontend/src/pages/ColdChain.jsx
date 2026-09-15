@@ -1,60 +1,98 @@
 import { useEffect, useState } from 'react';
 import { getColdChain } from '../api/client';
+import StatCard from '../components/StatCard';
 
-const severityColor = { 'CRITICAL': '#c0392b', 'REPORTABLE BREACH': '#e67e22', 'MINOR DEVIATION': '#f1c40f' };
-const severityTextColor = { 'CRITICAL': '#fff', 'REPORTABLE BREACH': '#fff', 'MINOR DEVIATION': '#333' };
+const SEV_BADGE = {
+  'CRITICAL':         'badge badge--critical',
+  'REPORTABLE BREACH':'badge badge--reportable',
+  'MINOR DEVIATION':  'badge badge--minor',
+};
 
-const badge = (sev) => (
-  <span style={{
-    background: severityColor[sev] || '#95a5a6',
-    color: severityTextColor[sev] || '#fff',
-    borderRadius: 4, padding: '2px 8px', fontSize: 12, fontWeight: 700
-  }}>{sev || 'UNKNOWN'}</span>
-);
+function SkeletonTable() {
+  return (
+    <table className="data-table">
+      <thead>
+        <tr>
+          {['Shipment', 'Cargo Type', 'Safe Range', 'Recorded Temp', 'Deviation', 'Severity', 'Recommended Action'].map(h => (
+            <th key={h}>{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {[0, 1, 2].map(i => (
+          <tr key={i} className="skeleton-row">
+            {[0, 1, 2, 3, 4, 5, 6].map(j => (
+              <td key={j}><div className="skeleton skeleton-cell" /></td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 export default function ColdChain() {
-  const [data, setData] = useState(null);
+  const [data,    setData]    = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getColdChain().then(r => { setData(r.data); setLoading(false); }).catch(() => setLoading(false));
+    getColdChain()
+      .then(r => { setData(r.data); setLoading(false); })
+      .catch(()  => setLoading(false));
   }, []);
 
-  if (loading) return <p>Scanning IoT sensor logs...</p>;
-  if (!data || !data.alerts.length) return <p style={{ color: '#27ae60' }}>No cold chain excursions detected.</p>;
+  if (loading) return (
+    <>
+      <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap', marginBottom: 'var(--space-6)' }}>
+        <div className="skeleton skeleton-card" />
+        <div className="skeleton skeleton-card" />
+        <div className="skeleton skeleton-card" />
+      </div>
+      <SkeletonTable />
+    </>
+  );
+
+  if (!data || !data.alerts.length) return (
+    <p className="empty-state empty-state--ok">No cold chain excursions detected.</p>
+  );
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
-        <div style={{ background: '#c0392b', color: '#fff', borderRadius: 8, padding: '12px 20px' }}>
-          <strong style={{ fontSize: 24 }}>{data.critical}</strong> <span style={{ fontSize: 13 }}>Critical</span>
-        </div>
-        <div style={{ background: '#e67e22', color: '#fff', borderRadius: 8, padding: '12px 20px' }}>
-          <strong style={{ fontSize: 24 }}>{data.reportable}</strong> <span style={{ fontSize: 13 }}>Reportable</span>
-        </div>
-        <div style={{ background: '#f1c40f', color: '#333', borderRadius: 8, padding: '12px 20px' }}>
-          <strong style={{ fontSize: 24 }}>{data.minor}</strong> <span style={{ fontSize: 13 }}>Minor</span>
-        </div>
+      <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap', marginBottom: 'var(--space-6)' }}>
+        <StatCard icon="🔴" value={data.critical}   label="Critical"   colorClass="red"    />
+        <StatCard icon="🟠" value={data.reportable} label="Reportable" colorClass="orange" />
+        <StatCard icon="🟡" value={data.minor}       label="Minor"      colorClass="yellow" />
       </div>
-      <h2>Excursion Alerts <span style={{ fontSize: 16, color: '#888' }}>({data.total_alerts})</span></h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+
+      <h2 className="page-title">
+        Excursion Alerts
+        <span className="page-title__count">({data.total_alerts})</span>
+      </h2>
+
+      <table className="data-table">
         <thead>
-          <tr style={{ background: '#f0f0f0' }}>
+          <tr>
             {['Shipment', 'Cargo Type', 'Safe Range', 'Recorded Temp', 'Deviation', 'Severity', 'Recommended Action'].map(h => (
-              <th key={h} style={{ padding: '8px 12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>{h}</th>
+              <th key={h}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {data.alerts.map((a, i) => (
-            <tr key={i} style={{ borderBottom: '1px solid #eee', background: a.severity === 'CRITICAL' ? '#fdf0f0' : undefined }}>
-              <td style={{ padding: '8px 12px', fontWeight: 600 }}>{a.shipment_ref}</td>
-              <td style={{ padding: '8px 12px' }}>{a.cargo_type}</td>
-              <td style={{ padding: '8px 12px' }}>{a.safe_range}</td>
-              <td style={{ padding: '8px 12px', fontWeight: 700, color: '#c0392b' }}>{a.excursion_temp}°C</td>
-              <td style={{ padding: '8px 12px' }}>+{Math.abs(a.deviation)}°C</td>
-              <td style={{ padding: '8px 12px' }}>{badge(a.severity)}</td>
-              <td style={{ padding: '8px 12px', fontSize: 12, color: '#444', maxWidth: 300 }}>{a.action}</td>
+            <tr key={i} className={a.severity === 'CRITICAL' ? 'row--critical' : ''}>
+              <td style={{ fontWeight: 700 }}>{a.shipment_ref}</td>
+              <td>{a.cargo_type}</td>
+              <td>{a.safe_range}</td>
+              <td style={{ fontWeight: 700, color: 'var(--color-red)' }}>{a.excursion_temp}°C</td>
+              <td>+{Math.abs(a.deviation)}°C</td>
+              <td>
+                <span className={SEV_BADGE[a.severity] || 'badge badge--grey'}>
+                  {a.severity || 'UNKNOWN'}
+                </span>
+              </td>
+              <td style={{ fontSize: 12, color: 'var(--color-text-muted)', maxWidth: 280 }}>
+                {a.action}
+              </td>
             </tr>
           ))}
         </tbody>
